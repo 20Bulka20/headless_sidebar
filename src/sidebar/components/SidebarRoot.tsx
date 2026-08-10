@@ -6,19 +6,22 @@ const SidebarRoot = ({
   children,
   layout = "desktop",
   activeId: activeIdProp,
+
+  sidebarClassName,
+  defaultExpanded = true,
 }: SidebarRootProps) => {
   const [activeId, setActiveId] = useState<SidebarId | null>(
     activeIdProp ?? null,
   );
-
+  const [expanded, setExpanded] = useState(defaultExpanded);
   return (
     <SidebarContext.Provider
       value={{
         layout,
-        expanded: true,
+        expanded,
         activeId,
         openSubId: null,
-        setExpanded: () => {},
+        setExpanded,
         setActiveId,
         openSub: () => {},
         closeSub: () => {},
@@ -28,7 +31,13 @@ const SidebarRoot = ({
         isActiveBranch: (id) => activeId === id,
       }}
     >
-      <nav>{children}</nav>
+      <nav
+        data-expanded={expanded ? "" : undefined}
+        data-collapsed={expanded ? undefined : ""}
+        className={` ${sidebarClassName}`}
+      >
+        {children}
+      </nav>
     </SidebarContext.Provider>
   );
 };

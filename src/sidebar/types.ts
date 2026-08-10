@@ -28,6 +28,7 @@ export type SidebarItemStatus = {
 
 export type SidebarRootProps = {
   children: ReactNode;
+  sidebarClassName?: string;
   layout?: SidebarLayout;
   defaultLayout?: SidebarLayout;
   onLayoutChange?: (layout: SidebarLayout) => void;
