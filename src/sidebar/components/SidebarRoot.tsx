@@ -5,15 +5,16 @@ import type { SidebarId, SidebarRootProps } from "../types";
 const SidebarRoot = ({
   children,
   layout = "desktop",
-  activeId: activeIdProp,
+  defaultActiveId,
 
   sidebarClassName,
   defaultExpanded = true,
 }: SidebarRootProps) => {
   const [activeId, setActiveId] = useState<SidebarId | null>(
-    activeIdProp ?? null,
+    defaultActiveId ?? null,
   );
   const [expanded, setExpanded] = useState(defaultExpanded);
+  console.log(activeId);
   return (
     <SidebarContext.Provider
       value={{

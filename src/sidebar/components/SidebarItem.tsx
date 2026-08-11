@@ -6,14 +6,14 @@ type SidebarItemProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   id: SidebarId;
   icon?: ReactNode;
   label?: ReactNode | string;
-  sidebarItemClassName?: string;
+  className?: string;
 };
 
 const SidebarItem = ({
   id,
   icon,
   label,
-  sidebarItemClassName,
+  className,
   ...rest
 }: SidebarItemProps) => {
   const { activeId, setActiveId, expanded } = useSidebar();
@@ -27,8 +27,8 @@ const SidebarItem = ({
         type="button"
         data-active={isActive ? "" : undefined}
         onClick={() => setActiveId(id)}
+        className={className}
         {...rest}
-        className={`${sidebarItemClassName}`}
       >
         {icon && icon}
         {expanded && label}

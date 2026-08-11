@@ -27,6 +27,8 @@ import {
 } from "lucide-react";
 
 function App() {
+  const SidebarItemStyles =
+    " flex items-center gap-2 h-10  px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer";
   return (
     <div className="flex h-screen ">
       <SidebarRoot
@@ -34,7 +36,7 @@ function App() {
         defaultExpanded={true}
         sidebarClassName="
         transition-[width]
-        data-expanded:w-50
+        data-expanded:w-52
         data-collapsed:w-16
         bg-slate-200"
       >
@@ -44,7 +46,7 @@ function App() {
             label={"Dashboard"}
             key="sidebar-item-1"
             id="item1"
-            sidebarItemClassName="flex items-center gap-2"
+            className={SidebarItemStyles}
           />
 
           <SidebarItem
@@ -52,7 +54,7 @@ function App() {
             label={"Inventory"}
             key="sidebar-item-2"
             id="item2"
-            sidebarItemClassName="flex items-center gap-2"
+            className={SidebarItemStyles}
           />
 
           <SidebarItem
@@ -60,7 +62,7 @@ function App() {
             label={"Sales"}
             key="sidebar-item-3"
             id="item3"
-            sidebarItemClassName="flex items-center gap-2"
+            className={SidebarItemStyles}
           />
 
           <SidebarItem
@@ -68,7 +70,7 @@ function App() {
             label={"Analytics"}
             key="sidebar-item-4"
             id="item4"
-            sidebarItemClassName="flex items-center gap-2"
+            className={SidebarItemStyles}
           />
 
           <SidebarItem
@@ -76,7 +78,7 @@ function App() {
             label={"Settings"}
             key="sidebar-item-5"
             id="item5"
-            sidebarItemClassName="flex items-center gap-2"
+            className={SidebarItemStyles}
           />
 
           <SidebarItem
@@ -84,7 +86,7 @@ function App() {
             label={"Reports"}
             key="sidebar-item-6"
             id="item6"
-            sidebarItemClassName="flex items-center gap-2"
+            className={SidebarItemStyles}
           />
         </SidebarList>
 
