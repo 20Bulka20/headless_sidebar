@@ -1,4 +1,9 @@
-import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+} from "react";
 import { useSidebar } from "../SidebarContext";
 import { useSubParentId } from "../SidebarSubMenuContext";
 import type { SidebarId } from "../types";
@@ -31,6 +36,7 @@ const SidebarItem = ({
     unregisterItem,
     isActiveBranch,
   } = useSidebar();
+  const [isHovered, setIsHovered] = useState(false);
 
   const parentId = useSubParentId();
   const isActive = isActiveBranch(id);
@@ -41,12 +47,14 @@ const SidebarItem = ({
   }, [id, parentId, registerItem, unregisterItem]);
 
   return (
-    <li>
+    <li className="relative">
       <button
         type="button"
         className={className}
         data-active={isActive ? "" : undefined}
         aria-current={isActive ? "page" : undefined}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         {...rest}
         onClick={(event) => {
           setActiveId(id);
@@ -60,8 +68,16 @@ const SidebarItem = ({
         {icon}
         {(expanded || parentId != null) && label}
       </button>
+      {isHovered && !expanded && label && <Tooltip content={label} />}
     </li>
   );
 };
 
+const Tooltip = ({ content }: { content: ReactNode }) => {
+  return (
+    <div className="pointer-events-none absolute left-full top-1/2 z-10 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-white px-2 py-1 shadow">
+      {content}
+    </div>
+  );
+};
 export default SidebarItem;
