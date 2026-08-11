@@ -5,12 +5,18 @@ type SidebarToggleProps = {
   children?: ReactNode;
 };
 export const SidebarToggle = ({ children }: SidebarToggleProps) => {
-  const { expanded, setExpanded } = useSidebar();
+  const { expanded, setExpanded, closeSub } = useSidebar();
+
+  const handleClick = () => {
+    setExpanded(!expanded);
+    closeSub();
+  };
   return (
     <button
       type="button"
       aria-expanded={expanded}
-      onClick={() => setExpanded(!expanded)}
+      onClick={handleClick}
+      className="cursor-pointer"
     >
       {children ?? (expanded ? "«" : "»")}
     </button>

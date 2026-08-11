@@ -1,8 +1,15 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { useSidebar } from "../SidebarContext";
+import { useSubParentId } from "../SidebarSubMenuContext";
 import type { SidebarId } from "../types";
 
-type SidebarItemProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+// Omit onClick: navigation/close belong in headless (setActiveId, closeSub) or Root
+// onActiveChange (router later). A consumer onClick would either be unused noise or
+// accidentally override the internal handler via ...rest.
+type SidebarItemProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "onClick" | "id"
+> & {
   id: SidebarId;
   icon?: ReactNode;
   label?: ReactNode | string;
@@ -16,22 +23,42 @@ const SidebarItem = ({
   className,
   ...rest
 }: SidebarItemProps) => {
-  const { activeId, setActiveId, expanded } = useSidebar();
-  const isActive = activeId === id;
+  const {
+    setActiveId,
+    expanded,
+    closeSub,
+    registerItem,
+    unregisterItem,
+    isActiveBranch,
+  } = useSidebar();
+
+  const parentId = useSubParentId();
+  const isActive = isActiveBranch(id);
+
+  useEffect(() => {
+    registerItem(id, parentId);
+    return () => unregisterItem(id);
+  }, [id, parentId, registerItem, unregisterItem]);
 
   return (
-    <li key={id}>
-      {" "}
-      {/* TODO: decide if we need to use key={id} */}
+    <li>
       <button
         type="button"
-        data-active={isActive ? "" : undefined}
-        onClick={() => setActiveId(id)}
         className={className}
+        data-active={isActive ? "" : undefined}
+        aria-current={isActive ? "page" : undefined}
         {...rest}
+        onClick={(event) => {
+          setActiveId(id);
+          // collapsed flyout: close after selecting a sub-item
+          if (!expanded && parentId != null) {
+            event.currentTarget.blur();
+            closeSub();
+          }
+        }}
       >
-        {icon && icon}
-        {expanded && label}
+        {icon}
+        {(expanded || parentId != null) && label}
       </button>
     </li>
   );
