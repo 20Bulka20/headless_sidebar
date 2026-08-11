@@ -8,7 +8,7 @@ export const SidebarContext = createContext<SidebarContextValue | undefined>(
 export function useSidebar() {
   const ctx = useContext(SidebarContext);
   if (!ctx) {
-    throw new Error("Sidebar.* must be used within Sidebar.Root");
+    throw new Error(" must be used within SidebarRoot");
   }
   return ctx;
 }
