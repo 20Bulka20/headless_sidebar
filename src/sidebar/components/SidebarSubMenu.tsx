@@ -93,40 +93,42 @@ export const SidebarSubMenu = ({
 
   const showTriggerLabel = isMobile || expanded;
 
-  const sheet =
-    isMobile && isOpen
-      ? createPortal(
-          <>
-            <button
-              type="button"
-              aria-label="Close menu"
-              className={sheetBackdropClassName}
-              onClick={closeSub}
-            />
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-label={typeof label === "string" ? label : undefined}
-              data-open=""
-              className={sheetClassName}
-            >
-              <div className={sheetHeaderClassName}>
-                <span>{label}</span>
-                <SidebarClose />
-              </div>
-              <ul
-                ref={contentRef}
-                className={
-                  sheetContentClassName ?? "flex flex-col gap-1 p-2 pb-6"
-                }
-              >
-                {children}
-              </ul>
+  // Keep children mounted on mobile even when closed so registerItem parent map
+  // survives sheet close — otherwise parent loses data-active after picking a child.
+  const sheet = isMobile
+    ? createPortal(
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            className={isOpen ? sheetBackdropClassName : "hidden"}
+            onClick={closeSub}
+          />
+          <div
+            role="dialog"
+            aria-modal={isOpen ? true : undefined}
+            aria-label={typeof label === "string" ? label : undefined}
+            data-open={isOpen ? "" : undefined}
+            className={isOpen ? sheetClassName : "hidden"}
+            inert={isOpen ? undefined : true}
+          >
+            <div className={sheetHeaderClassName}>
+              <span>{label}</span>
+              <SidebarClose />
             </div>
-          </>,
-          document.body,
-        )
-      : null;
+            <ul
+              ref={contentRef}
+              className={
+                sheetContentClassName ?? "flex flex-col gap-1 p-2 pb-6"
+              }
+            >
+              {children}
+            </ul>
+          </div>
+        </>,
+        document.body,
+      )
+    : null;
 
   return (
     <SubContext.Provider value={id}>
