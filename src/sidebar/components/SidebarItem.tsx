@@ -68,7 +68,9 @@ const SidebarItem = ({
         {icon}
         {(expanded || parentId != null) && label}
       </button>
-      {isHovered && !expanded && label && <Tooltip content={label} />}
+      {isHovered && !expanded && label && !parentId && (
+        <Tooltip content={label} />
+      )}
     </li>
   );
 };
