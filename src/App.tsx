@@ -1,7 +1,15 @@
+import { Navigate, Route, Routes } from "react-router";
 import "./App.css";
-
 import { useMediaQuery } from "./demo/useMediaQuery";
 import { StyledSidebar } from "./demo/StyledSidebar";
+import {
+  AnalyticsPage,
+  DashboardPage,
+  InventoryPage,
+  ReportsPage,
+  SalesPage,
+  SettingsPage,
+} from "./demo/pages";
 
 function App() {
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -10,8 +18,21 @@ function App() {
     <div className={`flex h-screen ${isMobile ? "flex-col" : "flex-row"}`}>
       <StyledSidebar isMobile={isMobile} />
 
-      <main className="flex min-h-0 min-w-0 flex-1 items-center justify-center bg-stone-50 text-stone-500">
-        Main content
+      <main
+        className={`min-h-0 min-w-0 flex-1 bg-stone-50 ${
+          isMobile ? "pb-20" : ""
+        }`}
+      >
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/inventory" element={<InventoryPage />} />
+          <Route path="/sales/list" element={<SalesPage />} />
+          <Route path="/sales/analytics" element={<AnalyticsPage />} />
+          <Route path="/sales/settings" element={<SettingsPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </main>
     </div>
   );
