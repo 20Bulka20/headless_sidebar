@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "../SidebarContext";
 import type { SidebarId, SidebarRootProps } from "../types";
 
@@ -14,6 +14,10 @@ const SidebarRoot = ({
   );
   const [expanded, setExpandedState] = useState(defaultExpanded);
   const [openSubId, setOpenSubId] = useState<SidebarId | null>(null);
+
+  useEffect(() => {
+    setOpenSubId(null);
+  }, [layout]);
 
   // parentById is used to store the parent of each item in the sidebar
   const [parentById, setParentById] = useState<
@@ -122,10 +126,11 @@ const SidebarRoot = ({
   return (
     <SidebarContext.Provider value={value}>
       <nav
+        data-layout={layout}
         data-expanded={expanded ? "" : undefined}
         data-collapsed={expanded ? undefined : ""}
         aria-label="Sidebar"
-        className={`group flex h-full flex-col ${sidebarClassName ?? ""}`}
+        className={`group  ${sidebarClassName ?? ""}`}
       >
         {children}
       </nav>

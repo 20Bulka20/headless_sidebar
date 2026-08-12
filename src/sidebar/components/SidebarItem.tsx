@@ -29,6 +29,7 @@ const SidebarItem = ({
   ...rest
 }: SidebarItemProps) => {
   const {
+    layout,
     setActiveId,
     expanded,
     closeSub,
@@ -40,6 +41,8 @@ const SidebarItem = ({
 
   const parentId = useSubParentId();
   const isActive = isActiveBranch(id);
+  const isMobile = layout === "mobile";
+  const showLabel = expanded || parentId != null || isMobile;
 
   useEffect(() => {
     registerItem(id, parentId);
@@ -58,6 +61,11 @@ const SidebarItem = ({
         {...rest}
         onClick={(event) => {
           setActiveId(id);
+          if (isMobile && parentId != null) {
+            event.currentTarget.blur();
+            closeSub();
+            return;
+          }
           // collapsed flyout: close after selecting a sub-item
           if (!expanded && parentId != null) {
             event.currentTarget.blur();
@@ -65,10 +73,10 @@ const SidebarItem = ({
           }
         }}
       >
-        {icon}
-        {(expanded || parentId != null) && label}
+        {icon && <span className="inline-flex shrink-0">{icon}</span>}
+        {showLabel && label}
       </button>
-      {isHovered && !expanded && label && !parentId && (
+      {isHovered && !expanded && !isMobile && label && !parentId && (
         <Tooltip content={label} />
       )}
     </li>

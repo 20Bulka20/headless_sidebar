@@ -5,7 +5,9 @@ type SidebarToggleProps = {
   children?: ReactNode;
 };
 export const SidebarToggle = ({ children }: SidebarToggleProps) => {
-  const { expanded, setExpanded } = useSidebar();
+  const { expanded, setExpanded, layout } = useSidebar();
+
+  if (layout === "mobile") return null;
 
   return (
     <button

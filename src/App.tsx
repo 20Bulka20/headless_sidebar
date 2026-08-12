@@ -3,91 +3,99 @@ import SidebarRoot from "./sidebar/components/SidebarRoot";
 import SidebarItem from "./sidebar/components/SidebarItem";
 import { SidebarList } from "./sidebar/components/SidebarList";
 import { SidebarToggle } from "./sidebar/components/SidebarToggle";
-import {
-  Sparkles,
-  Compass,
-  Infinity,
-  Layers,
-  Orbit,
-  TrendingUp,
-  CloudLightning,
-} from "lucide-react";
+import { Sparkles, Compass, TrendingUp, CloudLightning } from "lucide-react";
 import { SidebarSubMenu } from "./sidebar/components/SidebarSubMenu";
+import { useMediaQuery } from "./demo/useMediaQuery";
 
 function App() {
-  const SidebarItemStyles =
-    " flex w-full min-w-fit items-center gap-2 h-10  px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer whitespace-nowrap ";
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const layout = isMobile ? "mobile" : "desktop";
+
+  const desktopItemStyles =
+    "flex w-full min-w-0 items-center gap-2 h-10 px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer whitespace-nowrap group-data-[collapsed]:justify-center group-data-[collapsed]:px-2";
+
+  const mobileNavItemStyles =
+    "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs data-active:text-blue-600 data-active:bg-blue-50 cursor-pointer";
+
+  const mobileSheetItemStyles =
+    "flex w-full items-center rounded-lg px-4 py-3 text-left hover:bg-gray-100 data-active:bg-blue-50 data-active:text-blue-600 cursor-pointer";
+
+  const itemClassName = isMobile ? mobileNavItemStyles : desktopItemStyles;
+
   return (
-    <div className="flex h-screen ">
+    <div className={`flex h-screen ${isMobile ? "flex-col" : "flex-row"}`}>
       <SidebarRoot
+        layout={layout}
         defaultActiveId="item1"
         defaultExpanded={true}
-        sidebarClassName="
-     
-        transition-[width]
-        data-expanded:w-52
-        data-collapsed:w-16
-        bg-slate-200"
+        sidebarClassName={
+          isMobile
+            ? "fixed inset-x-0 bottom-0 z-40 border-t border-stone-200 bg-white"
+            : "h-full shrink-0 transition-[width] data-expanded:w-52 data-collapsed:w-16 bg-slate-200"
+        }
       >
-        <SidebarList listClassName="flex flex-col gap-2 p-4">
+        <SidebarList
+          listClassName={
+            isMobile
+              ? "flex flex-row justify-around gap-0 p-0"
+              : "flex flex-col gap-2 p-4"
+          }
+        >
           <SidebarItem
-            icon={<Sparkles className="w-4 h-4" />}
-            label={"Dashboard"}
-            key="sidebar-item-1"
+            icon={<Sparkles className="h-5 w-5 shrink-0" />}
+            label="Dashboard"
             id="item1"
-            className={SidebarItemStyles}
+            className={itemClassName}
           />
 
           <SidebarItem
-            icon={<Compass className="w-4 h-4" />}
-            label={"Inventory"}
-            key="sidebar-item-2"
+            icon={<Compass className="h-5 w-5 shrink-0" />}
+            label="Inventory"
             id="item2"
-            className={SidebarItemStyles}
+            className={itemClassName}
           />
 
           <SidebarSubMenu
-            key="sidebar-submenu-1"
             id="sidebar-submenu-1"
             label="Sales Block"
-            icon={<CloudLightning className="w-4 h-4" />}
-            triggerClassName={SidebarItemStyles}
+            icon={<CloudLightning className="h-5 w-5 shrink-0" />}
+            triggerClassName={itemClassName}
+            sheetBackdropClassName="fixed inset-0 z-50 bg-black/30"
+            sheetClassName="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-white shadow-lg"
+            sheetHeaderClassName="flex items-center justify-between border-b border-stone-200 px-4 py-3 font-semibold"
+            sheetContentClassName="flex flex-col gap-1 p-2 pb-6"
           >
             <SidebarItem
-              icon={<Infinity className="w-4 h-4" />}
-              label={"Sales"}
-              key="sidebar-item-3"
+              label="Sales"
               id="item3"
-              className={SidebarItemStyles}
+              className={isMobile ? mobileSheetItemStyles : desktopItemStyles}
             />
             <SidebarItem
-              icon={<Layers className="w-4 h-4" />}
-              label={"Analytics"}
-              key="sidebar-item-4"
+              label="Analytics"
               id="item4"
-              className={SidebarItemStyles}
+              className={isMobile ? mobileSheetItemStyles : desktopItemStyles}
             />
-
             <SidebarItem
-              icon={<Orbit className="w-4 h-4" />}
-              label={"Settings"}
-              key="sidebar-item-5"
+              label="Settings"
               id="item5"
-              className={SidebarItemStyles}
+              className={isMobile ? mobileSheetItemStyles : desktopItemStyles}
             />
           </SidebarSubMenu>
 
           <SidebarItem
-            icon={<TrendingUp className="w-4 h-4" />}
-            label={"Reports"}
-            key="sidebar-item-6"
+            icon={<TrendingUp className="h-5 w-5 shrink-0" />}
+            label="Reports"
             id="item6"
-            className={SidebarItemStyles}
+            className={itemClassName}
           />
         </SidebarList>
 
         <SidebarToggle />
       </SidebarRoot>
+
+      <main className="flex min-h-0 min-w-0 flex-1 items-center justify-center bg-stone-50 text-stone-500">
+        Main content
+      </main>
     </div>
   );
 }
