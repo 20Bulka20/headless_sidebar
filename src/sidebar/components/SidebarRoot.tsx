@@ -6,7 +6,8 @@ const SidebarRoot = ({
   children,
   layout = "desktop",
   defaultActiveId,
-  sidebarClassName,
+  className,
+
   defaultExpanded = true,
 }: SidebarRootProps) => {
   const [activeId, setActiveIdState] = useState<SidebarId | null>(
@@ -19,7 +20,6 @@ const SidebarRoot = ({
     setOpenSubId(null);
   }, [layout]);
 
-  // parentById is used to store the parent of each item in the sidebar
   const [parentById, setParentById] = useState<
     Map<SidebarId, SidebarId | null>
   >(() => new Map());
@@ -30,11 +30,9 @@ const SidebarRoot = ({
 
   const setExpanded = useCallback((value: boolean) => {
     setExpandedState(value);
-    // Clear flyout/hover open state when switching width mode
     setOpenSubId(null);
   }, []);
 
-  // registerItem is used to register an item in the sidebar
   const registerItem = useCallback(
     (id: SidebarId, parentId: SidebarId | null) => {
       setParentById((prev) => {
@@ -47,7 +45,6 @@ const SidebarRoot = ({
     [],
   );
 
-  // unregisterItem is used to unregister an item in the sidebar
   const unregisterItem = useCallback((id: SidebarId) => {
     setParentById((prev) => {
       if (!prev.has(id)) return prev;
@@ -57,7 +54,6 @@ const SidebarRoot = ({
     });
   }, []);
 
-  // isActiveBranch is used to check if an item is active
   const isActiveBranch = useCallback(
     (id: SidebarId) => {
       if (activeId == null) return false;
@@ -130,7 +126,7 @@ const SidebarRoot = ({
         data-expanded={expanded ? "" : undefined}
         data-collapsed={expanded ? undefined : ""}
         aria-label="Sidebar"
-        className={`group  ${sidebarClassName ?? ""}`}
+        className={className}
       >
         {children}
       </nav>

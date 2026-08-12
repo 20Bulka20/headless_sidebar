@@ -1,10 +1,17 @@
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { useSidebar } from "../SidebarContext";
+import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
 
 type SidebarToggleProps = {
   children?: ReactNode;
-};
-export const SidebarToggle = ({ children }: SidebarToggleProps) => {
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type">;
+
+export const SidebarToggle = ({
+  children,
+  className,
+  onClick,
+  ...rest
+}: SidebarToggleProps) => {
   const { expanded, setExpanded, layout } = useSidebar();
 
   if (layout === "mobile") return null;
@@ -13,10 +20,15 @@ export const SidebarToggle = ({ children }: SidebarToggleProps) => {
     <button
       type="button"
       aria-expanded={expanded}
-      onClick={() => setExpanded(!expanded)}
-      className="cursor-pointer"
+      data-expanded={expanded ? "" : undefined}
+      className={className}
+      {...rest}
+      onClick={(event) => {
+        setExpanded(!expanded);
+        onClick?.(event);
+      }}
     >
-      {children ?? (expanded ? "«" : "»")}
+      {children ?? (expanded ? <ArrowLeftToLine /> : <ArrowRightToLine />)}
     </button>
   );
 };

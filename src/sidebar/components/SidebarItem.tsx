@@ -19,6 +19,10 @@ type SidebarItemProps = Omit<
   icon?: ReactNode;
   label?: ReactNode | string;
   className?: string;
+  // Class for wrapping <li> (e.g. relative for tooltip positioning)
+  wrapperClassName?: string;
+  // Styles for collapsed-desktop tooltip — consumer only; no defaults
+  tooltipClassName?: string;
 };
 
 const SidebarItem = ({
@@ -26,6 +30,8 @@ const SidebarItem = ({
   icon,
   label,
   className,
+  wrapperClassName,
+  tooltipClassName,
   ...rest
 }: SidebarItemProps) => {
   const {
@@ -44,21 +50,32 @@ const SidebarItem = ({
   const isMobile = layout === "mobile";
   const showLabel = expanded || parentId != null || isMobile;
 
+  // Collapsed desktop leaf items: show label in tooltip on hover (visual only).
+
+  const showTooltip =
+    isHovered &&
+    !expanded &&
+    !isMobile &&
+    parentId == null &&
+    label != null &&
+    label !== "";
+
   useEffect(() => {
     registerItem(id, parentId);
     return () => unregisterItem(id);
   }, [id, parentId, registerItem, unregisterItem]);
 
   return (
-    <li className="relative">
+    <li className={wrapperClassName}>
       <button
         type="button"
         className={className}
         data-active={isActive ? "" : undefined}
         aria-current={isActive ? "page" : undefined}
+        aria-label={!showLabel && typeof label === "string" ? label : undefined}
+        {...rest}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        {...rest}
         onClick={(event) => {
           setActiveId(id);
           if (isMobile && parentId != null) {
@@ -66,28 +83,22 @@ const SidebarItem = ({
             closeSub();
             return;
           }
-          // collapsed flyout: close after selecting a sub-item
           if (!expanded && parentId != null) {
             event.currentTarget.blur();
             closeSub();
           }
         }}
       >
-        {icon && <span className="inline-flex shrink-0">{icon}</span>}
+        {icon}
         {showLabel && label}
       </button>
-      {isHovered && !expanded && !isMobile && label && !parentId && (
-        <Tooltip content={label} />
+      {showTooltip && (
+        <span role="tooltip" className={tooltipClassName}>
+          {label}
+        </span>
       )}
     </li>
   );
 };
 
-const Tooltip = ({ content }: { content: ReactNode }) => {
-  return (
-    <div className="pointer-events-none absolute left-full top-1/2 z-10 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-white px-2 py-1 shadow">
-      {content}
-    </div>
-  );
-};
 export default SidebarItem;

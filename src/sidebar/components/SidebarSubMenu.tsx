@@ -9,34 +9,38 @@ type SidebarSubMenuProps = {
   id: SidebarId;
   label: ReactNode;
   icon?: ReactNode;
+  /** Class for the wrapping <li> */
+  className?: string;
   triggerClassName?: string;
-  // Expanded desktop: inline list below trigger
+  /** Expanded desktop: inline list below trigger */
   inlineContentClassName?: string;
-  // Collapsed desktop: flyout panel to the right of trigger
+  /** Collapsed desktop: flyout panel to the right of trigger */
   flyoutContentClassName?: string;
-  // Mobile: list inside bottom sheet
-  sheetContentClassName?: string;
-  sheetClassName?: string;
-  sheetBackdropClassName?: string;
-  sheetHeaderClassName?: string;
+  /** Optional heading inside collapsed flyout */
+  flyoutHeadingClassName?: string;
+  /** Mobile: submenu panel (portal) */
+  panelClassName?: string;
+  panelBackdropClassName?: string;
+  panelHeaderClassName?: string;
+  panelContentClassName?: string;
+  panelCloseClassName?: string;
   children: ReactNode;
 };
-
-const defaultInlineContentClassName = "mt-1 flex flex-col gap-1 pl-4";
-const defaultFlyoutContentClassName =
-  "absolute left-full top-0 z-10 min-w-40 rounded  bg-white p-2 shadow";
 
 export const SidebarSubMenu = ({
   id,
   label,
   icon,
+  className,
   triggerClassName,
   inlineContentClassName,
   flyoutContentClassName,
-  sheetContentClassName,
-  sheetClassName,
-  sheetBackdropClassName,
-  sheetHeaderClassName,
+  flyoutHeadingClassName,
+  panelClassName,
+  panelBackdropClassName,
+  panelHeaderClassName,
+  panelContentClassName,
+  panelCloseClassName,
   children,
 }: SidebarSubMenuProps) => {
   const {
@@ -94,14 +98,15 @@ export const SidebarSubMenu = ({
   const showTriggerLabel = isMobile || expanded;
 
   // Keep children mounted on mobile even when closed so registerItem parent map
-  // survives sheet close — otherwise parent loses data-active after picking a child.
-  const sheet = isMobile
+  // survives panel close — otherwise parent loses data-active after picking a child.
+  const mobilePanel = isMobile
     ? createPortal(
         <>
           <button
             type="button"
             aria-label="Close menu"
-            className={isOpen ? sheetBackdropClassName : "hidden"}
+            hidden={!isOpen}
+            className={panelBackdropClassName}
             onClick={closeSub}
           />
           <div
@@ -109,19 +114,15 @@ export const SidebarSubMenu = ({
             aria-modal={isOpen ? true : undefined}
             aria-label={typeof label === "string" ? label : undefined}
             data-open={isOpen ? "" : undefined}
-            className={isOpen ? sheetClassName : "hidden"}
+            hidden={!isOpen}
+            className={panelClassName}
             inert={isOpen ? undefined : true}
           >
-            <div className={sheetHeaderClassName}>
+            <div className={panelHeaderClassName}>
               <span>{label}</span>
-              <SidebarClose />
+              <SidebarClose className={panelCloseClassName} />
             </div>
-            <ul
-              ref={contentRef}
-              className={
-                sheetContentClassName ?? "flex flex-col gap-1 p-2 pb-6"
-              }
-            >
+            <ul ref={contentRef} className={panelContentClassName}>
               {children}
             </ul>
           </div>
@@ -130,10 +131,14 @@ export const SidebarSubMenu = ({
       )
     : null;
 
+  const desktopContentClassName = expanded
+    ? inlineContentClassName
+    : flyoutContentClassName;
+
   return (
     <SubContext.Provider value={id}>
       <li
-        className="relative"
+        className={className}
         onMouseEnter={() => {
           if (!isMobile && !expanded) openSub(id);
         }}
@@ -146,32 +151,32 @@ export const SidebarSubMenu = ({
           data-active={isBranchActive ? "" : undefined}
           data-open={isOpen ? "" : undefined}
           aria-expanded={isOpen}
+          aria-label={
+            !showTriggerLabel && typeof label === "string" ? label : undefined
+          }
           className={triggerClassName}
           onClick={handleTriggerClick}
         >
-          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+          {icon}
           {showTriggerLabel && label}
         </button>
 
         {!isMobile && (
           <ul
             ref={contentRef}
+            hidden={!isOpen}
             inert={isOpen ? undefined : true}
             data-open={isOpen ? "" : undefined}
-            className={
-              isOpen
-                ? expanded
-                  ? (inlineContentClassName ?? defaultInlineContentClassName)
-                  : (flyoutContentClassName ?? defaultFlyoutContentClassName)
-                : "hidden"
-            }
+            className={desktopContentClassName}
           >
-            {!expanded && <span className="font-bold">{label}</span>}
+            {!expanded && (
+              <li className={flyoutHeadingClassName}>{label}</li>
+            )}
             {children}
           </ul>
         )}
 
-        {sheet}
+        {mobilePanel}
       </li>
     </SubContext.Provider>
   );
