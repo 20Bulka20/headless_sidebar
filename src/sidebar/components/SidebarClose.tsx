@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { useSidebar } from "../SidebarContext";
+import { X } from "lucide-react";
 
 type SidebarCloseProps = {
   children?: ReactNode;
@@ -22,7 +23,7 @@ export const SidebarClose = ({
       }}
       {...rest}
     >
-      {children ?? "×"}
+      {children ?? <X />}
     </button>
   );
 };
