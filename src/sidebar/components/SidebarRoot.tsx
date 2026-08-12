@@ -5,16 +5,25 @@ import type { SidebarId, SidebarRootProps } from "../types";
 const SidebarRoot = ({
   children,
   layout = "desktop",
-  defaultActiveId,
   className,
-
+  activeId: activeIdProp,
+  defaultActiveId = null,
+  onActiveChange,
+  expanded: expandedProp,
   defaultExpanded = true,
+  onExpandedChange,
 }: SidebarRootProps) => {
-  const [activeId, setActiveIdState] = useState<SidebarId | null>(
-    defaultActiveId ?? null,
-  );
-  const [expanded, setExpandedState] = useState(defaultExpanded);
+  const [activeIdUncontrolled, setActiveIdUncontrolled] =
+    useState<SidebarId | null>(defaultActiveId);
+  const [expandedUncontrolled, setExpandedUncontrolled] =
+    useState(defaultExpanded);
   const [openSubId, setOpenSubId] = useState<SidebarId | null>(null);
+
+  const isActiveControlled = activeIdProp !== undefined;
+  const activeId = isActiveControlled ? activeIdProp : activeIdUncontrolled;
+
+  const isExpandedControlled = expandedProp !== undefined;
+  const expanded = isExpandedControlled ? expandedProp : expandedUncontrolled;
 
   useEffect(() => {
     setOpenSubId(null);
@@ -24,14 +33,26 @@ const SidebarRoot = ({
     Map<SidebarId, SidebarId | null>
   >(() => new Map());
 
-  const setActiveId = useCallback((id: SidebarId) => {
-    setActiveIdState(id);
-  }, []);
+  const setActiveId = useCallback(
+    (id: SidebarId) => {
+      if (!isActiveControlled) {
+        setActiveIdUncontrolled(id);
+      }
+      onActiveChange?.(id);
+    },
+    [isActiveControlled, onActiveChange],
+  );
 
-  const setExpanded = useCallback((value: boolean) => {
-    setExpandedState(value);
-    setOpenSubId(null);
-  }, []);
+  const setExpanded = useCallback(
+    (value: boolean) => {
+      if (!isExpandedControlled) {
+        setExpandedUncontrolled(value);
+      }
+      onExpandedChange?.(value);
+      setOpenSubId(null);
+    },
+    [isExpandedControlled, onExpandedChange],
+  );
 
   const registerItem = useCallback(
     (id: SidebarId, parentId: SidebarId | null) => {

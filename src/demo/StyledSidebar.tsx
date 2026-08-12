@@ -1,4 +1,5 @@
 import { CloudLightning, Compass, Sparkles, TrendingUp } from "lucide-react";
+import { useLocation, useNavigate } from "react-router";
 import {
   SidebarItem,
   SidebarList,
@@ -9,6 +10,8 @@ import {
 
 export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
   const layout = isMobile ? "mobile" : "desktop";
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const desktopItemStyles =
     "flex w-full min-w-0 items-center gap-2 h-10 px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer whitespace-nowrap group-data-[collapsed]:justify-center group-data-[collapsed]:px-2";
@@ -27,7 +30,8 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
   return (
     <SidebarRoot
       layout={layout}
-      defaultActiveId="item1"
+      activeId={pathname}
+      onActiveChange={(id) => navigate(id)}
       defaultExpanded={true}
       className={
         isMobile
@@ -38,14 +42,14 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
       <SidebarList
         className={
           isMobile
-            ? "flex list-none flex-row justify-around gap-0 m-0 p-0"
+            ? "m-0 flex list-none flex-row justify-around gap-0 p-0"
             : "m-0 flex list-none flex-col gap-2 p-4"
         }
       >
         <SidebarItem
           icon={<Sparkles className="h-5 w-5 shrink-0" />}
           label="Dashboard"
-          id="item1"
+          id="/dashboard"
           className={itemClassName}
           wrapperClassName="relative"
           tooltipClassName={tooltipClassName}
@@ -54,14 +58,14 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
         <SidebarItem
           icon={<Compass className="h-5 w-5 shrink-0" />}
           label="Inventory"
-          id="item2"
+          id="/inventory"
           className={itemClassName}
           wrapperClassName="relative"
           tooltipClassName={tooltipClassName}
         />
 
         <SidebarSubMenu
-          id="sidebar-submenu-1"
+          id="/sales"
           label="Sales Block"
           icon={<CloudLightning className="h-5 w-5 shrink-0" />}
           className="relative"
@@ -77,17 +81,17 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
         >
           <SidebarItem
             label="Sales"
-            id="item3"
+            id="/sales/list"
             className={isMobile ? mobilePanelItemStyles : desktopItemStyles}
           />
           <SidebarItem
             label="Analytics"
-            id="item4"
+            id="/sales/analytics"
             className={isMobile ? mobilePanelItemStyles : desktopItemStyles}
           />
           <SidebarItem
             label="Settings"
-            id="item5"
+            id="/sales/settings"
             className={isMobile ? mobilePanelItemStyles : desktopItemStyles}
           />
         </SidebarSubMenu>
@@ -95,7 +99,7 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
         <SidebarItem
           icon={<TrendingUp className="h-5 w-5 shrink-0" />}
           label="Reports"
-          id="item6"
+          id="/reports"
           className={itemClassName}
           wrapperClassName="relative"
           tooltipClassName={tooltipClassName}
