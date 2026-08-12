@@ -16,13 +16,14 @@ import { SidebarSubMenu } from "./sidebar/components/SidebarSubMenu";
 
 function App() {
   const SidebarItemStyles =
-    " flex w-full min-w-fit items-center gap-2 h-10  px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer";
+    " flex w-full min-w-fit items-center gap-2 h-10  px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer whitespace-nowrap ";
   return (
     <div className="flex h-screen ">
       <SidebarRoot
         defaultActiveId="item1"
         defaultExpanded={true}
         sidebarClassName="
+     
         transition-[width]
         data-expanded:w-52
         data-collapsed:w-16

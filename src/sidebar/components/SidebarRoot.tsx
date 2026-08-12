@@ -26,6 +26,8 @@ const SidebarRoot = ({
 
   const setExpanded = useCallback((value: boolean) => {
     setExpandedState(value);
+    // Clear flyout/hover open state when switching width mode
+    setOpenSubId(null);
   }, []);
 
   // registerItem is used to register an item in the sidebar
@@ -40,7 +42,7 @@ const SidebarRoot = ({
     },
     [],
   );
-  console.log("parentById", parentById);
+
   // unregisterItem is used to unregister an item in the sidebar
   const unregisterItem = useCallback((id: SidebarId) => {
     setParentById((prev) => {
