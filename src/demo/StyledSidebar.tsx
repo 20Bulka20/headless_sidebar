@@ -6,6 +6,7 @@ import {
   SidebarRoot,
   SidebarSubMenu,
   SidebarToggle,
+  type SidebarId,
 } from "../sidebar";
 
 export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
@@ -27,11 +28,14 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
   const tooltipClassName =
     "pointer-events-none absolute left-full top-1/2 z-10 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-white px-2 py-1 text-sm text-stone-800 shadow";
 
+  const activeIdChangeHandler = (id: SidebarId) => {
+    navigate(id);
+  };
   return (
     <SidebarRoot
       layout={layout}
       activeId={pathname}
-      onActiveChange={(id) => navigate(id)}
+      onActiveChange={activeIdChangeHandler}
       defaultExpanded={true}
       className={
         isMobile

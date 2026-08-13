@@ -10,9 +10,6 @@ export { useSidebar } from "./SidebarContext";
 export type {
   SidebarId,
   SidebarLayout,
-  SidebarExpandedMode,
-  SidebarState,
-  SidebarItemStatus,
   SidebarRootProps,
   SidebarContextValue,
 } from "./types";

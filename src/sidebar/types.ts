@@ -6,46 +6,28 @@ export type SidebarId = string;
 // Viewport / layout mode of the menu
 export type SidebarLayout = "desktop" | "mobile";
 
-// Desktop width mode
-export type SidebarExpandedMode = "collapsed" | "expanded";
-
-export type SidebarState = {
-  layout: SidebarLayout;
-  expanded: boolean;
-  // Currently selected item
-  activeId: SidebarId | null;
-  // Which submenu is open
-  openSubId: SidebarId | null;
-};
-
-export type SidebarItemStatus = {
-  isActive: boolean;
-  // True when this item is a parent and some descendant is active
-  isParentActive: boolean;
-  // True when this submenu is the open one (`openSubId`)
-  isOpen: boolean;
-};
-
 export type SidebarRootProps = {
   children: ReactNode;
 
+  /** Optional class name for the root `<nav>` */
   className?: string;
 
+  /** Viewport mode: `"desktop"` | `"mobile"` */
   layout?: SidebarLayout;
-  defaultLayout?: SidebarLayout;
-  onLayoutChange?: (layout: SidebarLayout) => void;
 
+  /** Controlled expanded/collapsed state (desktop width mode) */
   expanded?: boolean;
+  /** Uncontrolled initial expanded state (used when `expanded` is omitted) */
   defaultExpanded?: boolean;
+  /** Called when expanded state changes */
   onExpandedChange?: (expanded: boolean) => void;
 
+  /** Controlled id of the currently selected item */
   activeId?: SidebarId | null;
+  /** Uncontrolled initial active item (used when `activeId` is omitted) */
   defaultActiveId?: SidebarId | null;
+  /** Called when the active item changes */
   onActiveChange?: (id: SidebarId) => void;
-
-  openSubId?: SidebarId | null;
-  defaultOpenSubId?: SidebarId | null;
-  onOpenSubChange?: (id: SidebarId | null) => void;
 };
 
 export type SidebarContextValue = {
