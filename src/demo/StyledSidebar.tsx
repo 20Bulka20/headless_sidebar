@@ -18,7 +18,7 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
     "flex w-full min-w-0 items-center gap-2 h-10 px-3 rounded-md hover:bg-gray-100 data-active:bg-blue-100 data-active:text-blue-600 cursor-pointer whitespace-nowrap group-data-[collapsed]:justify-center group-data-[collapsed]:px-2";
 
   const mobileNavItemStyles =
-    "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs data-active:text-blue-600 data-active:bg-blue-50 cursor-pointer";
+    "flex flex-1 flex-col items-center justify-center gap-0.5 p-2 rounded-md text-xs data-active:text-blue-600 data-active:bg-blue-50 cursor-pointer";
 
   const mobilePanelItemStyles =
     "flex w-full items-center rounded-lg px-4 py-3 text-left hover:bg-gray-100 data-active:bg-blue-50 data-active:text-blue-600 cursor-pointer";
@@ -46,7 +46,7 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
       <SidebarList
         className={
           isMobile
-            ? "m-0 flex list-none flex-row justify-around gap-0 p-0"
+            ? "m-0 flex list-none flex-row justify-around gap-0 p-2"
             : "m-0 flex list-none flex-col gap-2 p-4"
         }
       >
@@ -75,7 +75,7 @@ export const StyledSidebar = ({ isMobile }: { isMobile: boolean }) => {
           className="relative"
           triggerClassName={itemClassName}
           inlineContentClassName="mt-1 flex list-none flex-col gap-1 p-0 pl-4"
-          flyoutContentClassName="absolute left-full top-0 z-10 m-0 min-w-40 list-none rounded border bg-white p-2 shadow"
+          flyoutContentClassName="absolute left-full top-0 z-10 m-0 min-w-40 list-none rounded-md  bg-white p-2 shadow"
           flyoutHeadingClassName="px-2 py-1 font-bold"
           panelBackdropClassName="fixed inset-0 z-50 bg-black/30"
           panelClassName="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-white shadow-lg"
