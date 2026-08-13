@@ -18,9 +18,9 @@ export type SidebarRootProps = {
   /** Initial expanded/collapsed state (desktop width mode); toggled via SidebarToggle */
   defaultExpanded?: boolean;
 
-  /** Id of the currently selected item (controlled by the parent) */
+  /** Selected item id — owned by the parent (router, useState, etc.) */
   activeId?: SidebarId | null;
-  /** Called when an item is selected */
+  /** Called when an item is selected; parent should update `activeId` */
   onActiveChange?: (id: SidebarId) => void;
 };
 
