@@ -9,21 +9,15 @@ const SidebarRoot = ({
   activeId: activeIdProp,
   defaultActiveId = null,
   onActiveChange,
-  expanded: expandedProp,
   defaultExpanded = true,
-  onExpandedChange,
 }: SidebarRootProps) => {
   const [activeIdUncontrolled, setActiveIdUncontrolled] =
     useState<SidebarId | null>(defaultActiveId);
-  const [expandedUncontrolled, setExpandedUncontrolled] =
-    useState(defaultExpanded);
+  const [expanded, setExpandedState] = useState(defaultExpanded);
   const [openSubId, setOpenSubId] = useState<SidebarId | null>(null);
 
   const isActiveControlled = activeIdProp !== undefined;
   const activeId = isActiveControlled ? activeIdProp : activeIdUncontrolled;
-
-  const isExpandedControlled = expandedProp !== undefined;
-  const expanded = isExpandedControlled ? expandedProp : expandedUncontrolled;
 
   useEffect(() => {
     setOpenSubId(null);
@@ -43,16 +37,10 @@ const SidebarRoot = ({
     [isActiveControlled, onActiveChange],
   );
 
-  const setExpanded = useCallback(
-    (value: boolean) => {
-      if (!isExpandedControlled) {
-        setExpandedUncontrolled(value);
-      }
-      onExpandedChange?.(value);
-      setOpenSubId(null);
-    },
-    [isExpandedControlled, onExpandedChange],
-  );
+  const setExpanded = useCallback((value: boolean) => {
+    setExpandedState(value);
+    setOpenSubId(null);
+  }, []);
 
   const registerItem = useCallback(
     (id: SidebarId, parentId: SidebarId | null) => {

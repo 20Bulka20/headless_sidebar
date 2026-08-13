@@ -15,12 +15,8 @@ export type SidebarRootProps = {
   /** Viewport mode: `"desktop"` | `"mobile"` */
   layout?: SidebarLayout;
 
-  /** Controlled expanded/collapsed state (desktop width mode) */
-  expanded?: boolean;
-  /** Uncontrolled initial expanded state (used when `expanded` is omitted) */
+  /** Initial expanded/collapsed state (desktop width mode); toggled via SidebarToggle */
   defaultExpanded?: boolean;
-  /** Called when expanded state changes */
-  onExpandedChange?: (expanded: boolean) => void;
 
   /** Controlled id of the currently selected item */
   activeId?: SidebarId | null;

@@ -12,6 +12,7 @@ import {
 } from "./demo/pages";
 
 function App() {
+  // hook to check if the screen is mobile to show mobile or desktop layout
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   return (
