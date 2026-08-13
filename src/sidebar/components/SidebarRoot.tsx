@@ -6,19 +6,14 @@ const SidebarRoot = ({
   children,
   layout = "desktop",
   className,
-  activeId: activeIdProp,
-  defaultActiveId = null,
+  activeId = null,
   onActiveChange,
   defaultExpanded = true,
 }: SidebarRootProps) => {
-  const [activeIdUncontrolled, setActiveIdUncontrolled] =
-    useState<SidebarId | null>(defaultActiveId);
   const [expanded, setExpandedState] = useState(defaultExpanded);
   const [openSubId, setOpenSubId] = useState<SidebarId | null>(null);
 
-  const isActiveControlled = activeIdProp !== undefined;
-  const activeId = isActiveControlled ? activeIdProp : activeIdUncontrolled;
-
+  // reset openSubId when layout changes
   useEffect(() => {
     setOpenSubId(null);
   }, [layout]);
@@ -29,12 +24,9 @@ const SidebarRoot = ({
 
   const setActiveId = useCallback(
     (id: SidebarId) => {
-      if (!isActiveControlled) {
-        setActiveIdUncontrolled(id);
-      }
       onActiveChange?.(id);
     },
-    [isActiveControlled, onActiveChange],
+    [onActiveChange],
   );
 
   const setExpanded = useCallback((value: boolean) => {

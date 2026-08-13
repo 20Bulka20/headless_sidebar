@@ -9,7 +9,7 @@ export type SidebarLayout = "desktop" | "mobile";
 export type SidebarRootProps = {
   children: ReactNode;
 
-  /** Optional class name for the root `<nav>` */
+  /** Class name for the root `<nav>` */
   className?: string;
 
   /** Viewport mode: `"desktop"` | `"mobile"` */
@@ -18,11 +18,9 @@ export type SidebarRootProps = {
   /** Initial expanded/collapsed state (desktop width mode); toggled via SidebarToggle */
   defaultExpanded?: boolean;
 
-  /** Controlled id of the currently selected item */
+  /** Id of the currently selected item (controlled by the parent) */
   activeId?: SidebarId | null;
-  /** Uncontrolled initial active item (used when `activeId` is omitted) */
-  defaultActiveId?: SidebarId | null;
-  /** Called when the active item changes */
+  /** Called when an item is selected */
   onActiveChange?: (id: SidebarId) => void;
 };
 
