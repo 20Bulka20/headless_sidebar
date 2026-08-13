@@ -36,9 +36,9 @@ export type SidebarContextValue = {
   closeSub: () => void;
   toggleSub: (id: SidebarId) => void;
 
-  // Register parent/child to know when parent-active
+  // Descendant registry — see useActiveBranch
   registerItem: (id: SidebarId, parentId: SidebarId | null) => void;
   unregisterItem: (id: SidebarId) => void;
-  // Whether `id` or any of its descendants equals `activeId`
+  /** True when `id` is selected or is an ancestor of the selected item */
   isActiveBranch: (id: SidebarId) => boolean;
 };

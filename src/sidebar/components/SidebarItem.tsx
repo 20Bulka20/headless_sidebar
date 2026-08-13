@@ -56,6 +56,8 @@ const SidebarItem = ({
     label != null &&
     label !== "";
 
+  // Report this item into the parent map so ancestors can get data-active
+  // when a nested child is selected (see useActiveBranch).
   useEffect(() => {
     registerItem(id, parentId);
     return () => unregisterItem(id);

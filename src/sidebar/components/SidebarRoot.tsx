@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "../SidebarContext";
 import type { SidebarId, SidebarRootProps } from "../types";
+import { useActiveBranch } from "../useActiveBranch";
 
 const SidebarRoot = ({
   children,
@@ -18,9 +19,8 @@ const SidebarRoot = ({
     setOpenSubId(null);
   }, [layout]);
 
-  const [parentById, setParentById] = useState<
-    Map<SidebarId, SidebarId | null>
-  >(() => new Map());
+  const { registerItem, unregisterItem, isActiveBranch } =
+    useActiveBranch(activeId);
 
   const setActiveId = useCallback(
     (id: SidebarId) => {
@@ -33,49 +33,6 @@ const SidebarRoot = ({
     setExpandedState(value);
     setOpenSubId(null);
   }, []);
-
-  const registerItem = useCallback(
-    (id: SidebarId, parentId: SidebarId | null) => {
-      setParentById((prev) => {
-        if (prev.get(id) === parentId) return prev;
-        const next = new Map(prev);
-        next.set(id, parentId);
-        return next;
-      });
-    },
-    [],
-  );
-
-  const unregisterItem = useCallback((id: SidebarId) => {
-    setParentById((prev) => {
-      if (!prev.has(id)) return prev;
-      const next = new Map(prev);
-      next.delete(id);
-      return next;
-    });
-  }, []);
-
-  const isActiveBranch = useCallback(
-    (id: SidebarId) => {
-      if (activeId == null) return false;
-      if (activeId === id) return true;
-
-      let current: SidebarId | null = activeId;
-      const visited = new Set<SidebarId>();
-
-      while (current) {
-        if (visited.has(current)) break;
-        visited.add(current);
-
-        const parent: SidebarId | null | undefined = parentById.get(current);
-        if (parent === id) return true;
-        current = parent ?? null;
-      }
-
-      return false;
-    },
-    [activeId, parentById],
-  );
 
   const openSub = useCallback((id: SidebarId) => {
     setOpenSubId(id);
