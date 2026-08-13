@@ -99,22 +99,23 @@ export const SidebarSubMenu = ({
 
   // Keep children mounted on mobile even when closed so registerItem parent map
   // survives panel close — otherwise parent loses data-active after picking a child.
+
   const mobilePanel = isMobile
     ? createPortal(
         <>
           <button
             type="button"
             aria-label="Close menu"
-            hidden={!isOpen}
+            data-open={isOpen ? "" : undefined}
             className={panelBackdropClassName}
             onClick={closeSub}
+            inert={isOpen ? undefined : true}
           />
           <div
             role="dialog"
             aria-modal={isOpen ? true : undefined}
             aria-label={typeof label === "string" ? label : undefined}
             data-open={isOpen ? "" : undefined}
-            hidden={!isOpen}
             className={panelClassName}
             inert={isOpen ? undefined : true}
           >
@@ -169,9 +170,7 @@ export const SidebarSubMenu = ({
             data-open={isOpen ? "" : undefined}
             className={desktopContentClassName}
           >
-            {!expanded && (
-              <li className={flyoutHeadingClassName}>{label}</li>
-            )}
+            {!expanded && <li className={flyoutHeadingClassName}>{label}</li>}
             {children}
           </ul>
         )}
